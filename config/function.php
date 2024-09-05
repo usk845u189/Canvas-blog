@@ -7,12 +7,11 @@ define("MESSAGE_SIGNIN_SUCCESS", "Sign in is successful.");
 define("MESSAGE_SIGNIN_ERROR", "Sign in is error.");
 define("MESSAGE_SIGNUP_SUCCESS", "Sign up is successful.");
 define("MESSAGE_SIGNUP_ERROR", "Sign up is error.");
-define("MESSAGE_SIGNIN_SUCCESS", "Sign in is successful.");
-define("MESSAGE_SIGNUP_ERROR_NOT_AVAILABLE_NAME", "Sign up error. This name is not available.");
-define("MESSAGE_BLOG_POSTED", "Blog post have posted");
+define("MESSAGE_SIGNUP_ERROR_NOT_AVAILABLE_NAME", "Sign up is error. This name is not available.");
+define("MESSAGE_BLOG_POSTED", "Blog post has posted");
 define("MESSAGE_BLOG_POST_ERROR", "Blog post is unsuccessful");
-define("MESSAGE_BLOG_UPDATE", "Blog post have updated");
-define("MESSAGE_BLOG_DELETE", "Blog post have deleted");
+define("MESSAGE_BLOG_UPDATE", "Blog post has updated");
+define("MESSAGE_BLOG_DELETE", "Blog post has deleted");
 
 session_start();
 
@@ -52,6 +51,7 @@ function get_message()
     return $message;
 }
 
+
 function generate_csrf_token()
 {
     $bytes = random_bytes(32);
@@ -67,5 +67,5 @@ function validate_csrf_token($token)
     }
     $result = $_SESSION[SESSION_CSRF_TOKEN] === $token;
     unset($_SESSION[SESSION_CSRF_TOKEN]);
-    return $$result;
+    return $result;
 }

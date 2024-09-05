@@ -15,7 +15,7 @@
                     <h1>ブログ管理</h1>
                 </div>
             </div>
-            <button class="btn btn-secondery"><a href="signout.php">Sign out</a></button>
+            <button class="btn btn-secondery text-right"><a href="signout.php">Sign out</a></button>
         </div>
     </header>
     <section id="menu">

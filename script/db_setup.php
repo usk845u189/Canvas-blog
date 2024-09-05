@@ -22,7 +22,7 @@ try {
     )");
 
     $pdo->beginTransaction();
-    $pdo->prepare("inser into user (username, password_hash) values (:username, :hash_password)");
+    $ps = $pdo->prepare("insert into user (username, hash_password) values (:username, :hash_password)");
     $ps->bindValue(":username", $username, PDO::PARAM_STR);
     $ps->bindValue(":hash_password", $password, PDO::PARAM_STR);
     $ps->execute();

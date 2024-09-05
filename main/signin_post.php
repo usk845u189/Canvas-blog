@@ -1,7 +1,7 @@
 <?php
 require_once("../config/function.php");
 
-$cdrf_token = (string)filter_input(INPUT_POST, "csrf_token");
+$csrf_token = (string)filter_input(INPUT_POST, "csrf_token");
 if (validate_csrf_token($csrf_token)  === false) {
     error_log("Invalid csrf token.");
     header("Location: error.php");
