@@ -8,6 +8,7 @@ define("MESSAGE_SIGNIN_ERROR", "Sign in is error.");
 define("MESSAGE_SIGNUP_SUCCESS", "Sign up is successful.");
 define("MESSAGE_SIGNUP_ERROR", "Sign up is error.");
 define("MESSAGE_SIGNUP_ERROR_NOT_AVAILABLE_NAME", "Sign up is error. This name is not available.");
+define("MESSAGE_SIGNIN_REQUIRED", "Sign in is required.");
 define("MESSAGE_BLOG_POSTED", "Blog post has posted");
 define("MESSAGE_BLOG_POST_ERROR", "Blog post is unsuccessful");
 define("MESSAGE_BLOG_UPDATE", "Blog post has updated");
@@ -34,6 +35,11 @@ function new_PDO()
 
 function h($sql){
     return htmlspecialchars($sql, ENT_QUOTES);
+}
+
+function is_sign_in()
+{
+    return isset($_SESSION[SESSION_ACCOUNT]);
 }
 
 function set_message($message)
