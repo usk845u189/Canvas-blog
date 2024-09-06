@@ -20,7 +20,7 @@ $csrf_token = generate_csrf_token();
             <form action="signin_post.php" method="post">
                 <input type="hidden" name="csrf_token" value="<?php h($csrf_token) ?>" />
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="username">Name</label>
                     <input type="text" class="form-control" id="username" name="username">
                 </div>
                 <div class="form-group">
@@ -30,7 +30,7 @@ $csrf_token = generate_csrf_token();
                 <button type="submit" class="btn btn-secondary">Sign in</button>
             </form>
             <hr>
-            <a href="#">Sign up an account</a>
+            <a href="signup.php">Sign up an account</a>
         </div>
     </div>
 </main>

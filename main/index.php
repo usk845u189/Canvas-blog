@@ -1,5 +1,5 @@
 <?php
-require_once("../libs/function.php");
+require_once("../config/function.php");
 
 if (is_sign_in() === false) {
     set_message(MESSAGE_SIGNIN_REQUIRED);
@@ -7,6 +7,18 @@ if (is_sign_in() === false) {
     exit();
 }
 
+try {
+    $pdo = new_PDO();
+
+    $sql = "select * from blog ";
+    $st = $pdo->query("select * from blog ");
+    $blogs = $st->fetchAll();
+
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    header("Location: error.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +40,7 @@ if (is_sign_in() === false) {
         <div class="container my-3 py-3 bg-light">
             <div class="row">
                 <div class="col-md-3">
-                    <a href="#" class="btn btn-success w-100">ブログ作成</a>
+                    <a href="create.php" class="btn btn-success w-100">ブログ作成</a>
                 </div>
             </div>
         </div>
@@ -54,17 +66,18 @@ if (is_sign_in() === false) {
                                 </thead>
                                 <tbody>
                                     <!-- 繰り返し処理によってブログ内容を表示 -->
+                                    <?php foreach ($blogs as $blog) { ?>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><a href="#" class="btn btn-secondary">
+                                        <td><?= h($blog["id"]) ?></td>
+                                        <td><?= h($blog["title"]) ?></td>
+                                        <td><?= h($blog["created_date"]) ?></td>
+                                        <td><?= h(get_username($blog["id"])) ?></td>
+                                        <td><a href="show_post.php?id=<?= h($blog["id"]) ?>" class="btn btn-secondary">
                                                 詳細
                                             </a>
                                         </td>
                                     </tr>
-                                    <!-- ループ処理中止 -->
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>

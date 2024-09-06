@@ -10,7 +10,7 @@ define("MESSAGE_SIGNUP_ERROR", "Sign up is error.");
 define("MESSAGE_SIGNUP_ERROR_NOT_AVAILABLE_NAME", "Sign up is error. This name is not available.");
 define("MESSAGE_SIGNIN_REQUIRED", "Sign in is required.");
 define("MESSAGE_BLOG_POSTED", "Blog post has posted");
-define("MESSAGE_BLOG_POST_ERROR", "Blog post is unsuccessful");
+define("MESSAGE_BLOG_POST_ERROR", "Blog post is failed");
 define("MESSAGE_BLOG_UPDATE", "Blog post has updated");
 define("MESSAGE_BLOG_DELETE", "Blog post has deleted");
 
@@ -42,6 +42,22 @@ function is_sign_in()
     return isset($_SESSION[SESSION_ACCOUNT]);
 }
 
+function get_account()
+{
+    if (is_sign_in() === false) {
+        return false;
+    }
+    return $_SESSION[SESSION_ACCOUNT];
+}
+
+function get_account_id()
+{
+    $account = get_account();
+    if ($account === false) {
+        return false;
+    }
+    return $account["id"];
+}
 function set_message($message)
 {
     $_SESSION[SESSION_MESSAGE] = $message;
@@ -55,6 +71,21 @@ function get_message()
     $message = $_SESSION[SESSION_MESSAGE];
     unset($_SESSION[SESSION_MESSAGE]);
     return $message;
+}
+
+function get_username($user_id)
+{
+    $pdo = new_PDO();
+    $sql = "select username from user where id = :id";
+    $ps = $pdo->prepare($sql);
+    $ps->bindValue(":id", $user_id, PDO::PARAM_INT);
+    $ps->execute();
+    $username = $ps->fetch();
+    if ($username === false) {
+        return false;
+    }
+
+    return $username;
 }
 
 
