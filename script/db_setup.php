@@ -3,13 +3,16 @@ set_time_limit(0);
 
 require_once("../config/config.php");
 
-$username = "Adimn_user";
+$username = "Admin_user";
 $password = password_hash("123", PASSWORD_DEFAULT);
 
 try {
+    $pdo->exec("drop table if exists user");
+    $pdo->exec("drop table if exists blog");
+
     $pdo->exec("CREATE TABLE IF NOT EXISTS user(
         id INT AUTO_INCREMENT PRIMARY KEY, 
-        username TEXT UNIQUE NOT NULL, 
+        username VARCHAR(255) UNIQUE NOT NULL, 
         hash_password TEXT NOT NULL
     )");
 

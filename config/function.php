@@ -85,7 +85,7 @@ function get_username($user_id)
         return false;
     }
 
-    return $username;
+    return $username['username'];
 }
 
 

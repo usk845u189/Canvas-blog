@@ -70,7 +70,7 @@ try {
                                     <tr>
                                         <td><?= h($blog["id"]) ?></td>
                                         <td><?= h($blog["title"]) ?></td>
-                                        <td><?= h($blog["created_date"]) ?></td>
+                                        <td><?= h(date('Y-m-d', strtotime($blog['created_date']))) ?></td>
                                         <td><?= h(get_username($blog["id"])) ?></td>
                                         <td><a href="show_post.php?id=<?= h($blog["id"]) ?>" class="btn btn-secondary">
                                                 詳細

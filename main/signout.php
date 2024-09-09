@@ -1,8 +1,9 @@
 <?php
 require_once("../config/function.php");
 
-if (is_sign_in()) {
+if (is_sign_in() === false) {
     return false;
+
 }
 $_SESSION = [];
 if (ini_get("session.use_cookies")) {

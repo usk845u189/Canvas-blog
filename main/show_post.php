@@ -8,7 +8,7 @@ if ($id === "") {
 }
 
 $pdo = new_PDO();
-$sql = "select user_id, created_date, title, blog_text where id = :id";
+$sql = "select * from blog where id = :id";
 $ps = $pdo->prepare($sql);
 $ps->bindValue(":id", $id, PDO::PARAM_INT);
 $ps->execute();
@@ -30,10 +30,10 @@ if ($blog === false) {
         <div class="container my-3 bg-light">
             <div class="row">
                 <div class="col-md-9 m-auto text-center">
-                    <h1 class="fst-italic"><?php $blog["title"] ?></h1>
+                    <h1 class="fst-italic"><?php echo h($blog["title"]) ?></h1>
                     <hr>
-                    <p><?php h($blog["created_date"]) ?></p><br>
-                    <p><?php h(get_username($blog["id"])) ?></p>
+                    <p><?php echo h(date('Y-m-d', strtotime($blog['created_date']))) ?></p>
+                    <p><?php echo h(get_username($blog["user_id"])) ?></p>
                 </div>
             </div>
         </div>
@@ -45,16 +45,16 @@ if ($blog === false) {
                 <!--ブログ投稿-->
                 <section id="blog_post">
                     <div class="container py-2 bg-light">
-                        <p class="mb-3"><?php h($blog["text"]) ?></p>
+                        <p class="mb-3"><?php echo h($blog["blog_text"]) ?></p>
                     </div>
                 </section>
                 <!--メニュー-->
                 <section id="menu">
                     <div class="container my-3 py-4 bg-light">
                         <div class="row">
-                            <?php if (get_account() === $blog["user_id"]) { ?>
+                            <?php if (get_account_id() === $blog["user_id"]) { ?>
                                 <div class="col-md-3 mb-3">
-                                    <a href="update_post.php?id=<?php h($blog["id"]) ?>" class="btn btn-success w-100">更新</a>
+                                    <a href="update.php?id=<?php echo h($blog["id"]); ?>" class="btn btn-success w-100">更新</a>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#del_modal">削除</button>
@@ -82,7 +82,8 @@ if ($blog === false) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                    <form action="delete_post.php?id=<?php $blog["id"] ?>" method='GET'>
+                    <form action="delete_post.php" method='GET'>
+                        <input type="hidden" name="id" value="<?php echo h($blog["id"]); ?>">
                         <input type="submit" class="btn btn-danger" value="削除">
                     </form>
                 </div>
