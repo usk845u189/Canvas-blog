@@ -1,6 +1,12 @@
 <?php
 require_once("../config/function.php");
 
+if (is_sign_in() === false) {
+    set_message(MESSAGE_SIGNIN_REQUIRED);
+    header("Location: signin.php");
+    exit();
+}
+
 $id = $id = filter_input(INPUT_GET, "id");
 if ($id === "") {
     header("Location: error.php");
@@ -31,7 +37,7 @@ $blog = $ps->fetch();
                         </div>
                         <div class="card-body">
                             <form action="update_post.php" method="post">
-                                <input type="hidden" name="id" value="<?php h($blog["id"]); ?>">
+                                <input type="hidden" name="id" value="<?php echo h($blog["id"]); ?>">
                                 <div class="form-group mb-3">
                                     <label for="title">Title</label>
                                     <input type="text" class="form-control" id="title" name="title" value="<?php echo h($blog["title"]); ?>">

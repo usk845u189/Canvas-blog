@@ -1,6 +1,12 @@
 <?php
 require_once("../config/function.php");
 
+if (is_sign_in() === false) {
+    set_message(MESSAGE_SIGNIN_REQUIRED);
+    header("Location: signin.php");
+    exit();
+}
+
 $id = (string)filter_input(INPUT_GET, "id");
 if ($id === "") {
     header("Location: error.php");

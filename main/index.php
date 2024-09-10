@@ -7,12 +7,33 @@ if (is_sign_in() === false) {
     exit();
 }
 
+$perpage = 10;
+
+$page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, [
+    'options' => [
+        'default' => 1, 
+        'min_range' => 1,
+    ]
+]);
+
 try {
     $pdo = new_PDO();
 
-    $sql = "select * from blog ";
-    $st = $pdo->query("select * from blog ");
-    $blogs = $st->fetchAll();
+    $sql = "select count(*) from blog ";
+    $total_posts = $pdo->query($sql)->fetchColumn();
+    
+    $total_pages = ceil($total_posts / $perpage);
+
+    // どこから表示するかの計算
+    $offset = ($page - 1) * $perpage;
+
+    // 投稿を取得
+    $sql = "select * from blog order by created_date desc limit :perpage offset :offset";
+    $ps = $pdo->prepare($sql);
+    $ps->bindValue(':perpage', $perpage, PDO::PARAM_INT);
+    $ps->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $ps->execute();
+    $blogs = $ps->fetchAll();
 
 } catch (PDOException $e) {
     error_log($e->getMessage());
@@ -71,7 +92,7 @@ try {
                                         <td><?= h($blog["id"]) ?></td>
                                         <td><?= h($blog["title"]) ?></td>
                                         <td><?= h(date('Y-m-d', strtotime($blog['created_date']))) ?></td>
-                                        <td><?= h(get_username($blog["id"])) ?></td>
+                                        <td><?= h(get_username($blog["user_id"])) ?></td>
                                         <td><a href="show_post.php?id=<?= h($blog["id"]) ?>" class="btn btn-secondary">
                                                 詳細
                                             </a>
@@ -82,6 +103,36 @@ try {
                             </table>
                         </div>
                     </div>
+
+                    <!-- ページネーション -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <!-- 前へ -->
+                            <?php if($page > 1) { ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?= $page - 1 ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+
+                            <!-- ページ番号 -->
+                            <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                </li>
+                            <?php } ?>
+
+                            <!-- 次へ -->
+                            <?php if ($page < $total_pages) { ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?= $page + 1 ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
