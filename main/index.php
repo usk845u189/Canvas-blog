@@ -107,29 +107,37 @@ try {
                     <!-- ページネーション -->
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
-                            <!-- 前へ -->
+                            <!-- Previous -->
                             <?php if($page > 1) { ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="?page=<?= $page - 1 ?>" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?= $page - 1 ?>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo; Previous</span>
+                                </a>
+                            </li>
+                            <?php } else { ?>
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-disabled="true">&laquo; Previous</a>
+                            </li>
                             <?php } ?>
 
-                            <!-- ページ番号 -->
+                            <!-- ページ番号-->
                             <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
-                                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                                </li>
+                            <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            </li>
                             <?php } ?>
 
-                            <!-- 次へ -->
-                            <?php if ($page < $total_pages) { ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="?page=<?= $page + 1 ?>" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
+                            <!-- Next -->
+                            <?php if($page < $total_pages) { ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?= $page + 1 ?>" aria-label="Next">
+                                <span aria-hidden="true">Next &raquo;</span>
+                                </a>
+                            </li>
+                            <?php } else { ?>
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-disabled="true">Next &raquo;</a>
+                            </li>
                             <?php } ?>
                         </ul>
                     </nav>
