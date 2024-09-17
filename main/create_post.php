@@ -1,5 +1,6 @@
 <?php
 require_once("../config/function.php");
+require_once("../libs/BlogDAO.php");
 
 $user_id = (string)filter_input(INPUT_POST, "user_id");
 if ($user_id === "") {
@@ -34,14 +35,8 @@ if ($title === "") {
 try {
     $pdo = new_PDO();
 
-    $sql = "insert into blog (user_id, title, blog_text) values (:user_id, :title, :blog_text)";
-    $ps = $pdo->prepare($sql);
-    $ps->bindValue(":user_id", $user_id, PDO::PARAM_INT);
-    $ps->bindValue(":title", $title, PDO::PARAM_STR);
-    $ps->bindValue(":blog_text", $text, PDO::PARAM_STR);
-    $ps->execute();
-
-    set_message(MESSAGE_BLOG_POSTED);
+    $blog_dao = new BlogDAO($pdo);
+    $blog_dao->insert($user_id, $title, $text);
 
     header("Location: index.php");
 } catch (PDOException $e) {

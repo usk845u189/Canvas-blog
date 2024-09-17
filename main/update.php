@@ -7,55 +7,19 @@ if (is_sign_in() === false) {
     exit();
 }
 
-$id = $id = filter_input(INPUT_GET, "id");
-if ($id === "") {
+$csrf_token = (string)filter_input(INPUT_GET, "csrf_token");
+if (validate_csrf_token($csrf_token)  === false) {
+    error_log("Invalid csrf token.");
     header("Location: error.php");
     exit();
 }
 
-$pdo = new_PDO();
-$sql = "select * from blog where id = :id";
-$ps = $pdo->prepare($sql);
-$ps->bindValue(":id", $id, PDO::PARAM_INT);
-$ps->execute();
-$blog = $ps->fetch();
+// $id = $id = filter_input(INPUT_GET, "id");  セッションからIDを取得するように変更する
+$id = get_account_id();
 
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <?php require("../main/views/_head_view.php") ?>
-</head>
-<body>
-<section id="blog_post">
-        <div class="container my-3 ">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>ブログ投稿</h4>
-                        </div>
-                        <div class="card-body">
-                            <form action="update_post.php" method="post">
-                                <input type="hidden" name="id" value="<?php echo h($blog["id"]); ?>">
-                                <div class="form-group mb-3">
-                                    <label for="title">Title</label>
-                                    <input type="text" class="form-control" id="title" name="title" value="<?php echo h($blog["title"]); ?>">
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="text">Text</label>
-                                    <textarea class="form-control form-control-lg" id="blog_text" name="blog_text" ><?php echo h($blog["blog_text"]); ?></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-secondary">投稿</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <script>
-        CKEDITOR.replace( 'text' );
-    </script>
-</body>
-</html>
+$pdo = new_PDO();
+
+$blog_dao = new BlogDAO($pdo);
+$blog = $blog_dao->selectById($id);
+
+require("../views/update_view.php");

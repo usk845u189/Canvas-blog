@@ -88,6 +88,22 @@ function get_username($user_id)
     return $username['username'];
 }
 
+function check_author($blog_id){
+    $pdo = new_PDO();
+    $sql = "select user_id from blog where id = :id";
+    $ps = $pdo->prepare($sql);
+    $ps->bindValue(":id", $blog_id, PDO::PARAM_INT);
+    $ps->execute();
+    $username_in_blog = $ps->fetch();
+
+    $username_current = get_account_id();
+
+    if ($username_in_blog !== $username_current) {
+        return false;
+    }
+
+    return true;
+}
 
 function generate_csrf_token()
 {

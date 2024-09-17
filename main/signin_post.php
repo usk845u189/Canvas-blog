@@ -1,5 +1,6 @@
 <?php
 require_once("../config/function.php");
+require_once("../libs/UserDAO.php");
 
 $csrf_token = (string)filter_input(INPUT_POST, "csrf_token");
 if (validate_csrf_token($csrf_token)  === false) {
@@ -38,11 +39,8 @@ if (mb_strlen($password) > 30) {
 try {
     $pdo = new_PDO();
 
-    $sql = "select id, username, hash_password from user where username = :username";
-    $ps = $pdo->prepare($sql);
-    $ps->bindValue(":username", $username, PDO::PARAM_STR);
-    $ps->execute();
-    $account = $ps->fetch();
+    $user_dao = new UserDAO($pdo);
+    $account = $user_dao->selectByUername($username);
 
     if ($account === false) {
         set_message(MESSAGE_SIGNIN_ERROR);

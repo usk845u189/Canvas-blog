@@ -1,31 +1,3 @@
-<?php
-require_once("../config/function.php");
-
-if (is_sign_in() === false) {
-    set_message(MESSAGE_SIGNIN_REQUIRED);
-    header("Location: signin.php");
-    exit();
-}
-
-$id = (string)filter_input(INPUT_GET, "id");
-if ($id === "") {
-    header("Location: error.php");
-    exit();
-}
-
-$pdo = new_PDO();
-$sql = "select * from blog where id = :id";
-$ps = $pdo->prepare($sql);
-$ps->bindValue(":id", $id, PDO::PARAM_INT);
-$ps->execute();
-$blog = $ps->fetch();
-if ($blog === false) {
-    header("Location: error.php");
-    exit();
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,12 +32,12 @@ if ($blog === false) {
                         <div class="row">
                             <?php if (get_account_id() === $blog["user_id"]) { ?>
                                 <div class="col-md-3 mb-3">
-                                    <a href="update.php?id=<?php echo h($blog["id"]); ?>" class="btn btn-success w-100">更新</a>
+                                    <a href="update.php?csrf_token=<?php $csrf_token?>" class="btn btn-success w-100">更新</a>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#del_modal">削除</button>
                                 </div>
-                                <?php } ?>
+                            <?php } ?>
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-secondary w-100" onclick="history.back()">戻る</button>
                             </div>
@@ -89,7 +61,8 @@ if ($blog === false) {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
                     <form action="delete_post.php" method='GET'>
-                        <input type="hidden" name="id" value="<?php echo h($blog["id"]); ?>">
+                        <input type="hidden" name="id" value="<?php echo $id ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                         <input type="submit" class="btn btn-danger" value="削除">
                     </form>
                 </div>

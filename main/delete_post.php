@@ -1,18 +1,29 @@
 <?php
 require_once("../config/function.php");
+require_once("../libs/BlogDAO.php");
 
 $id = filter_input(INPUT_GET, "id");
 if ($id === "") {
     header("Location: error.php");
     exit();
 }
+if (check_author($id) !== false) {
+    header("Location: error.php");
+    exit();
+}
+
+$csrf_token = (string)filter_input(INPUT_GET, "csrf_token");
+if (validate_csrf_token($csrf_token)  === false) {
+    error_log("Invalid csrf token.");
+    header("Location: error.php");
+    exit();
+}
 
 try {
     $pdo = new_PDO();
-    $sql = "delete from blog where id = :id";
-    $ps = $pdo->prepare($sql);
-    $ps->bindValue(":id", $id, PDO::PARAM_INT);
-    $ps->execute();
+    
+    $blog_dao = new BlogDAO($pdo);
+    $blog_dao->deleteByID($id);
 
     header("Location: index.php");
 } catch (PDOException $e) {

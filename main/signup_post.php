@@ -1,5 +1,6 @@
 <?php
 require_once("../config/function.php");
+require_once("../libs/UserDAO.php");
 
 $csrf_token = (string)filter_input(INPUT_POST, "csrf_token");
 if (validate_csrf_token($csrf_token)  === false) {
@@ -40,13 +41,8 @@ $hash_password = password_hash($password, PASSWORD_DEFAULT);
 try {
     $pdo = new_PDO();
 
-    $sql = "insert into user (username, hash_password) values (:username, :hash_password)";
-    $ps = $pdo->prepare($sql);
-    $ps->bindValue(":username", $username, PDO::PARAM_STR);
-    $ps->bindValue(":hash_password", $hash_password, PDO::PARAM_STR);
-    $ps->execute();
-
-    set_message(MESSAGE_SIGNUP_SUCCESS);
+    $user_dao = new UserDAO($pdo);
+    $user_dao->insert($username, $hash_password);
 
     header("Location: signin/php");
 } catch (PDOException $e) {
