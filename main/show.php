@@ -1,6 +1,6 @@
 <?php
 require_once("../config/function.php");
-require_once("../libs/BlogDAO.php");
+require_once("../main/libs/BlogDAO.php");
 
 if (is_sign_in() === false) {
     set_message(MESSAGE_SIGNIN_REQUIRED);
@@ -21,4 +21,4 @@ $pdo = new_PDO();
 $blog_dao = new BlogDAO($pdo);
 $blog = $blog_dao->selectById($id);
 
-require("../views/show_view.php");
+require("../main/views/show_view.php");

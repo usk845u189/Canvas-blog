@@ -1,6 +1,6 @@
 <?php
 require_once("../config/function.php");
-require_once("../libs/BlogDAO.php");
+require_once("../main/libs/BlogDAO.php");
 
 $id = filter_input(INPUT_GET, "id");
 if ($id === "") {

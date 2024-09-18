@@ -1,5 +1,6 @@
 <?php
 require_once("../config/function.php");
+require_once("../main/libs/BlogDAO.php");
 
 if (is_sign_in() === false) {
     set_message(MESSAGE_SIGNIN_REQUIRED);
@@ -14,12 +15,15 @@ if (validate_csrf_token($csrf_token)  === false) {
     exit();
 }
 
-// $id = $id = filter_input(INPUT_GET, "id");  セッションからIDを取得するように変更する
-$id = get_account_id();
+$id = filter_input(INPUT_GET, "id"); 
+if ($id === "") {
+    header("Location: error.php");
+    exit();
+}
 
 $pdo = new_PDO();
 
 $blog_dao = new BlogDAO($pdo);
 $blog = $blog_dao->selectById($id);
 
-require("../views/update_view.php");
+require("../main/views/update_view.php");

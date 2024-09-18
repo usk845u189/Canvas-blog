@@ -32,7 +32,7 @@
                         <div class="row">
                             <?php if (get_account_id() === $blog["user_id"]) { ?>
                                 <div class="col-md-3 mb-3">
-                                    <a href="update.php?csrf_token=<?php $csrf_token?>" class="btn btn-success w-100">更新</a>
+                                    <a href="update.php?csrf_token=<?php echo $csrf_token; ?>&id=<?php echo $id; ?>" class="btn btn-success w-100">更新</a>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#del_modal">削除</button>

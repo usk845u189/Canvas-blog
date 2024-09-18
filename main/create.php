@@ -7,4 +7,4 @@ if (is_sign_in() === false) {
     exit();
 }
 
-require("../views/create_view.php");
+require("../main/views/create_view.php");

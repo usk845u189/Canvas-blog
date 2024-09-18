@@ -1,6 +1,6 @@
 <?php
 require_once("../config/function.php");
-require_once("../libs/BlogDAO.php");
+require_once("../main/libs/BlogDAO.php");
 
 $user_id = (string)filter_input(INPUT_POST, "user_id");
 if ($user_id === "") {

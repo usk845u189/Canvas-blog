@@ -32,7 +32,7 @@
         </div>
     </section>
     <script>
-        CKEDITOR.replace( 'text' );
+        CKEDITOR.replace( 'blog_text' );
     </script>
 </body>
 </html>

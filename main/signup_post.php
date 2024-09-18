@@ -1,6 +1,6 @@
 <?php
 require_once("../config/function.php");
-require_once("../libs/UserDAO.php");
+require_once("../main/libs/UserDAO.php");
 
 $csrf_token = (string)filter_input(INPUT_POST, "csrf_token");
 if (validate_csrf_token($csrf_token)  === false) {

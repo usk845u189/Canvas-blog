@@ -1,6 +1,6 @@
 <?php
 require_once("../config/function.php");
-require_once("../libs/BlogDAO.php");
+require_once("../main/libs/BlogDAO.php");
 
 if (is_sign_in() === false) {
     set_message(MESSAGE_SIGNIN_REQUIRED);
@@ -21,7 +21,7 @@ try {
     $pdo = new_PDO();
 
     $blog_dao = new BlogDAO($pdo);
-    $total_posts = $blog_dao->$blog_dao->searchall();
+    $total_posts = $blog_dao->searchall();
     
     $total_pages = ceil($total_posts / $perpage);
 
@@ -36,7 +36,7 @@ try {
     $ps->execute();
     $blogs = $ps->fetchAll();
 
-    require("../views/index_view.php");
+    require("../main/views/index_view.php");
 
 } catch (PDOException $e) {
     error_log($e->getMessage());
